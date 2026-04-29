@@ -21,15 +21,15 @@
 | Komponente | Technologie | Warum |
 |------------|-------------|-------|
 | Static Site Generator | Hugo Extended | Single Binary, bewährt, große Template-Bibliothek |
-| CSS | Tailwind CSS v3 (Standalone CLI) | Utility-First, minimales CSS-Bundle, Single Binary |
+| CSS | Tailwind CSS v3 (npm) | Utility-First, minimales CSS-Bundle |
 | Deployment | GitHub Webhook → Server → Hugo Build | Direktes Git-basiertes Deployment |
 | Webserver | SWAG (Nginx Docker) | Reverse Proxy mit Let's Encrypt |
 | Hosting | Eigener Arch-Linux-Server | Volle Kontrolle |
 
 **Lessons aus campa (GEW-Bund/campa):**
-- Build-Tools (Hugo) auf Host, nicht in Docker
+- Build-Tools (Hugo, Node.js) auf Host, nicht in Docker
 - Hugo ist ein Single Binary – kein Container nötig
-- Tailwind Standalone CLI ist ebenfalls ein Single Binary – kein Node.js nötig
+- npm für Tailwind – gleicher Flow wie campa
 - Docker nur für Services, die 24/7 laufen (SWAG/Nginx)
 - GitHub Webhook statt Actions — der Server pullt selbst
 - `assets/css/` editieren, `static/css/` ist generiert – nie manuell editieren
@@ -74,7 +74,7 @@ blog.weitzelnet.com/
 ├── deployment/                      ← setup.sh (heredocs → _output/ ist gitignored)
 ├── hugo.toml
 ├── tailwind.config.js
-├── Plan.md                          ← Projekt-Plan
+├── package.json                    ← npm Config + Scripts
 ├── README.md                        ← Setup, Dev
 ├── TODO.md                          ← Offene Aufgaben
 └── agents.md                        ← Diese Datei
@@ -379,34 +379,34 @@ Statische Seiten über `layouts/_default/single.html`. Hugo rendert `content/imp
 ```
 assets/css/main.css (editieren!)
        ↓
-  Tailwind Standalone CLI (Binary)
+   npm run build:css  (tailwindcss CLI via node_modules)
        ↓
 static/css/main.css (GENERIERT – nicht editieren!)
        ↓
   Hugo lädt es per <link>
 ```
 
-### Tailwind Standalone CLI
+### npm Scripts
 
-**Kein Node.js nötig.** Das Binary wird von GitHub Releases geladen:
-
-```bash
-# Einmalig: Binary herunterladen (Beispiel Linux x64)
-curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.17/tailwindcss-linux-x64
-chmod +x tailwindcss-linux-x64
-sudo mv tailwindcss-linux-x64 /usr/local/bin/tailwindcss
+```json
+{
+  "scripts": {
+    "dev:css": "tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --watch",
+    "build:css": "tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --minify"
+  }
+}
 ```
 
 ### Development (Watch-Modus)
 
 ```bash
-tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --watch
+npm run dev:css
 ```
 
 ### Production (Build)
 
 ```bash
-tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --minify
+npm run build:css
 ```
 
 ### tailwind.config.js
@@ -435,8 +435,10 @@ module.exports = {
 ```bash
 git clone <repo-url> .
 
+npm install
+
 # Terminal 1: Tailwind Watch
-tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --watch
+npm run dev:css
 
 # Terminal 2: Hugo Dev Server
 hugo server
@@ -447,7 +449,7 @@ hugo server
 ### Build
 
 ```bash
-tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --minify
+npm run build:css
 hugo --minify
 # Output in public/
 ```

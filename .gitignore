@@ -6,6 +6,10 @@
 # Tailwind
 /static/css/main.css
 
+# Node.js
+node_modules/
+package-lock.json
+
 # Deployment — generierte Configs (werden von setup.sh erstellt)
 deployment/_output/
 

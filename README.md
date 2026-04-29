@@ -6,7 +6,8 @@ Hugo + Tailwind CSS. Keine Cookies, kein Tracking.
 ## Voraussetzungen
 
 - [Hugo Extended](https://gohugo.io/installation/)
-- [Tailwind CSS Standalone CLI](https://github.com/tailwindlabs/tailwindcss/releases) v3.4+
+- [Node.js](https://nodejs.org/) v20+ (für Tailwind CSS)
+- npm (kommt mit Node.js)
 
 ## Tools installieren
 
@@ -14,10 +15,11 @@ Hugo + Tailwind CSS. Keine Cookies, kein Tracking.
 # Hugo Extended (Arch)
 sudo pacman -S hugo
 
-# Tailwind Standalone CLI (Linux x64)
-curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.17/tailwindcss-linux-x64
-chmod +x tailwindcss-linux-x64
-sudo mv tailwindcss-linux-x64 /usr/local/bin/tailwindcss
+# Node.js + npm (Arch)
+sudo pacman -S nodejs npm
+
+# Projekt-Dependencies
+npm install
 ```
 
 ## Lokale Entwicklung
@@ -36,16 +38,16 @@ Wenn du `assets/css/main.css` änderst, Tailwind neu kompilieren:
 
 ```bash
 # Einmalig
-tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --minify
+npm run build:css
 
 # Oder Watch-Modus (dauerhaft, zweites Terminal)
-tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --watch
+npm run dev:css
 ```
 
 ### Für den Live-Betrieb bauen
 
 ```bash
-tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --minify
+npm run build:css
 hugo --minify
 # Ergebnis in public/
 ```
@@ -55,12 +57,12 @@ hugo --minify
 Die Site wird bei jedem Push auf `main` automatisch aktualisiert:
 
 ```
-GitHub Push → Webhook → git pull → tailwindcss (minify) → hugo (minify) → Nginx
+GitHub Push → Webhook → git pull → npm install → npm run build:css → hugo --minify → Nginx
 ```
 
 ### Setup (einmalig auf dem Server)
 
-**Voraussetzungen auf dem Server:** Git, Hugo, Tailwind Standalone CLI, webhook (`sudo pacman -S webhook`), systemd, SWAG/Nginx mit SSL.
+**Voraussetzungen auf dem Server:** Git, Hugo, Node.js, npm, webhook (`sudo pacman -S webhook`), systemd, SWAG/Nginx mit SSL.
 
 ```bash
 # Repository klonen
@@ -84,6 +86,7 @@ blog.weitzelnet.com/
 ├── static/               ← Bilder, CSS-Output (generiert)
 ├── assets/css/           ← Tailwind-Quelle (editieren!)
 ├── deployment/           ← setup.sh (heredocs → _output/)
+├── package.json          ← npm config + Scripts
 ├── hugo.toml
 └── tailwind.config.js
 ```

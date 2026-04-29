@@ -56,16 +56,21 @@ WEB_DIR="[WWW-PFAD]"
 LOG="[WEBHOOK-PFAD]/deploy.log"
 DOMAIN="[DOMAIN]"
 
-command -v git >/dev/null 2>&1         || { echo "FEHLER: git nicht gefunden" >&2; exit 1; }
-command -v tailwindcss >/dev/null 2>&1 || { echo "FEHLER: tailwindcss nicht gefunden" >&2; exit 1; }
-command -v hugo >/dev/null 2>&1        || { echo "FEHLER: hugo nicht gefunden" >&2; exit 1; }
+command -v git >/dev/null 2>&1  || { echo "FEHLER: git nicht gefunden" >&2; exit 1; }
+command -v node >/dev/null 2>&1 || { echo "FEHLER: node nicht gefunden" >&2; exit 1; }
+command -v npm >/dev/null 2>&1  || { echo "FEHLER: npm nicht gefunden" >&2; exit 1; }
+command -v hugo >/dev/null 2>&1 || { echo "FEHLER: hugo nicht gefunden" >&2; exit 1; }
 
 echo "$(date): Deploy gestartet" >> "$LOG"
 
 cd "$REPO_DIR"
 git pull origin main >> "$LOG" 2>&1
 
-tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --minify >> "$LOG" 2>&1
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+npm install >> "$LOG" 2>&1
+npm run build:css >> "$LOG" 2>&1
 
 hugo --minify -d "$WEB_DIR" --baseURL "https://$DOMAIN" >> "$LOG" 2>&1
 

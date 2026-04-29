@@ -1,0 +1,27 @@
+{{ define "main" }}
+<article class="max-w-3xl mx-auto px-4 py-16">
+  <p class="text-primary text-sm font-medium mb-4">
+    <a href="/">&larr; Zurück zur Startseite</a>
+  </p>
+  <h1 class="text-3xl font-bold tracking-tight mb-4">{{ .Title }}</h1>
+  {{ if .Params.ki_hinweis }}
+    <p class="text-sm text-gray-500 mb-8">Entstanden mit KI-Unterstützung</p>
+  {{ end }}
+  <div class="text-gray-700 leading-relaxed space-y-4 mb-8">
+    {{ .Content }}
+  </div>
+  {{ if .Params.tech_stack }}
+    <h3 class="text-lg font-semibold mb-2">Tech-Stack</h3>
+    <ul class="flex flex-wrap gap-2 mb-8">
+      {{ range .Params.tech_stack }}
+        <li class="px-3 py-1 bg-gray-100 rounded-full text-sm">{{ . }}</li>
+      {{ end }}
+    </ul>
+  {{ end }}
+  {{ if .Params.repo_url }}
+    <a href="{{ .Params.repo_url }}" class="inline-block mt-4 px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors" target="_blank" rel="noopener">
+      Repository auf GitHub
+    </a>
+  {{ end }}
+</article>
+{{ end }}

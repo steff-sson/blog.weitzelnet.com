@@ -1,0 +1,26 @@
+{{ define "main" }}
+<section class="max-w-5xl mx-auto px-4 pt-16 pb-12 text-center">
+  <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-2">{{ .Params.hero.title }}</h1>
+  <p class="text-lg text-gray-500">{{ .Params.hero.claim }}</p>
+</section>
+
+<section class="max-w-3xl mx-auto px-4 py-16">
+  <h2 class="text-2xl font-bold tracking-tight mb-6">{{ .Params.vorstellung_title }}</h2>
+  <div class="text-gray-700 leading-relaxed space-y-4">
+    {{ .Content }}
+  </div>
+</section>
+
+<section class="max-w-5xl mx-auto px-4 py-16">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {{ range .Params.projekte }}
+      <article class="border border-gray-200 rounded-xl p-8 hover:border-primary transition-colors">
+        <h3 class="text-xl font-bold tracking-tight mb-2">
+          <a href="/projekte/{{ .slug }}/" class="text-gray-900 hover:text-primary no-underline">{{ .title }}</a>
+        </h3>
+        <p class="text-gray-500 text-sm">{{ .teaser }}</p>
+      </article>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

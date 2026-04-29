@@ -1,0 +1,15 @@
+{{ define "main" }}
+<section class="max-w-5xl mx-auto px-4 py-16">
+  <h1 class="text-3xl font-bold tracking-tight mb-8">{{ .Title }}</h1>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {{ range .Pages }}
+      <article class="border border-gray-200 rounded-xl p-8 hover:border-primary transition-colors">
+        <h2 class="text-xl font-bold tracking-tight mb-2">
+          <a href="{{ .RelPermalink }}" class="text-gray-900 hover:text-primary no-underline">{{ .Title }}</a>
+        </h2>
+        <p class="text-gray-500 text-sm">{{ .Description }}</p>
+      </article>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

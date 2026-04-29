@@ -1,0 +1,17 @@
+baseURL = "https://blog.weitzelnet.com/"
+languageCode = "de-DE"
+title = "Weitzelnet"
+disableKinds = ["taxonomy", "term"]
+
+[params]
+  description = "Persönliche Markenseite von Stefan Weitzel – Projekte & Portfolio"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+    [markup.goldmark.parser]
+      [markup.goldmark.parser.attribute]
+        block = true
+        title = true
+      hardLineBreak = true

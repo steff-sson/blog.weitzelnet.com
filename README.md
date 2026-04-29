@@ -9,11 +9,6 @@ Hugo + Tailwind CSS. Keine Cookies, kein Tracking.
 - Tailwind CSS v3 (Standalone CLI, kein Node.js)
 - Deployment via GitHub Webhook
 
-## Lizenz
-
-- **Code** (Templates, CSS): MIT
-- **Content** (Texte, Bilder): CC BY-NC-ND 4.0
-
 ## Lokale Entwicklung
 
 ### Voraussetzungen

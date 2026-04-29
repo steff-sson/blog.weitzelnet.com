@@ -19,6 +19,7 @@ Keine Cookies. Kein Tracking. Kein Kontaktformular. Einfachste Datenschutzerklä
 - **Hugo Extended** (Static Site Generator, Single Binary)
 - **Tailwind CSS v3 – Standalone CLI** (Utility-First CSS, kein Node.js nötig)
 - **Deployment**: GitHub Webhook → Arch-Linux-Server → SWAG (Nginx) → Hugo Build `public/`
+- **Lizenz Code**: MIT | **Lizenz Content**: CC BY-NC-ND 4.0
 - **KEINE Cookies, KEINE Tracker**
 
 ---
@@ -38,7 +39,7 @@ Keine Cookies. Kein Tracking. Kein Kontaktformular. Einfachste Datenschutzerklä
 
 1. **Header** – Typo/Logo "Weitzelnet", direkte Links rechts → Impressum, Datenschutz
 2. **Hero** – Breites Logo, Claim, Kurzsatz
-3. **"Das ist Weitzelnet"** – Persönliche Vorstellung (Basis: `wwwweitzelnetcom.md`)
+3. **"Das ist Weitzelnet"** – Persönliche Vorstellung (Basis: `wwwweitzelnetcom.md` in `Hintergrund/` — vor Hugo-Init nach `content/weitzelnet.md` kopieren)
 4. **Projekte-Teaser** – 4 Karten mit Link zur jeweiligen Detailseite
 5. **Footer** – E-Mail-Alias, "Mit KI-Unterstützung entwickelt"
 

@@ -1,7 +1,7 @@
 [
   {
     "id": "deploy-blog",
-    "execute-command": "[PFAD-ZUM-WEBHOOK]/scripts/deploy.sh",
+    "execute-command": "[WEBHOOK-PFAD]/scripts/deploy.sh",
     "response-message": "Deployment gestartet",
     "trigger-rule": {
       "and": [

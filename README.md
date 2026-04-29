@@ -55,11 +55,9 @@ GitHub Push auf main
 
 ### Was auf dem Server installiert sein muss
 
-- **Git** (Repo klonen/pullen)
-- **Hugo Extended**
-- **Tailwind CSS Standalone CLI**
+- **Git**, **Hugo Extended**, **Tailwind CSS Standalone CLI**
 - **webhook** ([github.com/adnanh/webhook](https://github.com/adnanh/webhook))
-- **SWAG** (Docker) oder Nginx mit SSL (Reverse Proxy)
+- **SWAG** (Docker) oder Nginx mit SSL
 - **systemd** (für den Webhook-Service)
 
 ```bash
@@ -80,51 +78,49 @@ sudo mv tailwindcss-linux-x64 /usr/local/bin/tailwindcss
 git clone [REPO-URL] [PFAD-ZUM-REPO]
 ```
 
-#### 2. Deployment-Dateien anpassen und ablegen
+#### 2. Setup-Script ausführen
 
-Im Ordner `deployment/` findest du alle nötigen Konfigurationsdateien als Vorlage.
-Kopiere sie an die angegebenen Pfade und ersetze die Platzhalter `[...]` mit deinen Werten.
-
-| Datei | Ablegen nach | Platzhalter |
-|---|---|---|
-| `deployment/deploy.sh` | `[WEBHOOK-PFAD]/scripts/deploy.sh` | `[PFAD-ZUM-REPO]`, `[WWW-PFAD]`, `[WEBHOOK-PFAD]` |
-| `deployment/hooks.json` | `[WEBHOOK-PFAD]/hooks.json` | `[WEBHOOK-PFAD]`, `[WEBHOOK-SECRET]` |
-| `deployment/webhook.service` | `/etc/systemd/system/webhook.service` | `[BENUTZER]`, `[WEBHOOK-PFAD]` |
-| `deployment/nginx-location.conf` | In die Nginx/SWAG-Site-Konfig einfügen | `[GEHEIMER-PFAD]` |
+Das Script `deployment/setup.sh` fragt alle Pfade und Zugangsdaten ab und
+erzeugt daraus die fertigen Konfigurationsdateien:
 
 ```bash
-chmod +x [WEBHOOK-PFAD]/scripts/deploy.sh
+cd [PFAD-ZUM-REPO]
+./deployment/setup.sh
 ```
 
-**Was die Platzhalter bedeuten:**
+Die fertigen Dateien liegen danach in `deployment/generated/`.
 
-| Platzhalter | Bedeutung | Beispiel |
+Das sind:
+
+| Vorlage | Erzeugt | Wohin? |
 |---|---|---|
-| `[PFAD-ZUM-REPO]` | Pfad zum geklonten Repository | `/home/stefan/blog.weitzelnet.com` |
-| `[WWW-PFAD]` | Webroot – wo Hugo die fertigen Dateien hinbaut | `/var/www/blog.weitzelnet.com` |
-| `[WEBHOOK-PFAD]` | Ordner für Webhook-Dateien (deploy.sh, hooks.json, deploy.log) | `/opt/webhook` |
-| `[BENUTZER]` | System-Benutzer, unter dem der Service läuft | `stefan` |
-| `[WEBHOOK-SECRET]` | HMAC-Key zur Signatur-Prüfung | `openssl rand -hex 32` |
-| `[GEHEIMER-PFAD]` | Geheimer Teil der Webhook-URL | `a3f8b2c1…` (zufällig, kein Passwort) |
+| `deploy.sh.example` | `generated/deploy.sh` | `[WEBHOOK-PFAD]/scripts/` |
+| `hooks.json.example` | `generated/hooks.json` | `[WEBHOOK-PFAD]/` |
+| `webhook.service.example` | `generated/webhook.service` | `/etc/systemd/system/` |
+| `nginx-location.conf.example` | `generated/nginx-location.conf` | In SWAG/Nginx-Site-Konfig einfügen |
+| `logrotate.conf.example` | `generated/logrotate.conf` | `/etc/logrotate.d/` |
 
-#### 3. Webhook-Service starten
+#### 3. Dateien an ihre Zielpfade kopieren
+
+Die genauen `sudo cp`-Befehle zeigt `setup.sh` am Ende an.
+
+#### 4. Webhook-Service starten
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable webhook
-sudo systemctl start webhook
+sudo systemctl enable --now webhook
 ```
 
-#### 4. GitHub Webhook einrichten
+#### 5. GitHub Webhook einrichten
 
 1. GitHub → **Repository** → **Settings** → **Webhooks** → **Add webhook**
-2. **Payload URL:** `https://[DEINE-DOMAIN]/webhook-[GEHEIMER-PFAD]/`
+2. **Payload URL:** Die URL, die `setup.sh` ausgibt (z. B. `https://example.com/webhook-a3f8b2c1/`)
 3. **Content type:** `application/json`
-4. **Secret:** Das `[WEBHOOK-SECRET]` aus Schritt 2
-5. **Events:** "Just the push event" (reicht für `main`)
-6. **Add webhook** — GitHub schickt einen Ping, der im Log erscheint
+4. **Secret:** Das `[WEBHOOK-SECRET]` aus `setup.sh`
+5. **Events:** "Just the push event"
+6. **Add webhook**
 
-#### 5. Testen
+### Testen
 
 ```bash
 # Läuft der Webhook-Service?
@@ -141,7 +137,7 @@ cat [WEBHOOK-PFAD]/deploy.log
 
 | Problem | Prüfen mit |
 |---|---|
-| Webhook antwortet nicht | `ss -tlnp \| grep 9000` (Port offen?), Nginx-Proxy korrekt? |
+| Webhook antwortet nicht | `ss -tlnp \| grep 9000`, Nginx-Proxy korrekt? |
 | Trigger-Regeln schlagen fehl | `journalctl -u webhook` → "Trigger rules were not satisfied" |
 | Build fehlgeschlagen | `cat [WEBHOOK-PFAD]/deploy.log` |
 | Alte Seite nach Deployment | Browser Hard-Refresh (Strg+Shift+R) |
@@ -151,14 +147,10 @@ cat [WEBHOOK-PFAD]/deploy.log
 ```
 blog.weitzelnet.com/
 ├── content/              ← Markdown-Inhalte
-│   ├── _index.md         ← Startseite (Hero, Vorstellung, Projekte)
-│   ├── projekte/         ← Projekt-Detailseiten
-│   ├── impressum.md
-│   └── datenschutz.md
 ├── layouts/              ← Hugo-Templates
 ├── static/               ← Bilder, CSS-Output (generiert)
 ├── assets/css/           ← Tailwind-Quelle (editieren!)
-├── deployment/           ← Beispiel-Dateien fürs Server-Deployment
+├── deployment/           ← Setup-Script + .example-Vorlagen (generated/ ist gitignored)
 ├── hugo.toml
 └── tailwind.config.js
 ```

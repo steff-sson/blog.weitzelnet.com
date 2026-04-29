@@ -71,11 +71,14 @@ blog.weitzelnet.com/
 ├── assets/
 │   └── css/
 │       └── main.css                 ← Tailwind-Quelle (editieren!)
-├── deployment/                      ← Beispiel-Dateien fürs Server-Deployment (Platzhalter, keine echten Pfade)
-│   ├── deploy.sh
-│   ├── hooks.json
-│   ├── webhook.service
-│   └── nginx-location.conf
+├── deployment/                      ← Setup-Script + .example-Vorlagen (generated/ ist gitignored)
+│   ├── setup.sh                      ← Fragt Variablen ab, erzeugt fertige Konfigurationen
+│   ├── deploy.sh.example
+│   ├── hooks.json.example
+│   ├── webhook.service.example
+│   ├── nginx-location.conf.example
+│   ├── logrotate.conf.example
+│   └── generated/                    ← Hier landen die fertigen Dateien (gitignored)
 ├── hugo.toml
 ├── tailwind.config.js
 ├── Plan.md                          ← Projekt-Plan
@@ -466,9 +469,11 @@ hugo --minify
 4. Nur bei Build-Erfolg (Exit 0) wird `public/` ausgeliefert
 5. Statischer Output wird von SWAG (Nginx) ausgeliefert
 
-**Beispiel-Dateien fürs Deployment** liegen im `deployment/`-Ordner. Sie enthalten 
-ausschließlich `[PLATZHALTER]` statt echter Server-Pfade, User-Namen oder Secrets.
-Die eigentlichen Werte werden erst beim Kopieren auf den Server gesetzt (siehe README.md).
+**Deployment-Setup** erfolgt über `deployment/setup.sh`:
+1. Fragt alle Pfade, Zugangsdaten und Secrets interaktiv ab
+2. Erzeugt aus den `.example`-Vorlagen fertige Konfigurationen in `deployment/generated/`
+3. `deployment/generated/` ist via `.gitignore` von Versionierung ausgeschlossen
+4. Die `.example`-Dateien enthalten ausschließlich `[PLATZHALTER]` — keine echten Pfade oder Secrets
 
 ---
 

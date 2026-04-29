@@ -3,19 +3,37 @@
 Persönliche Markenseite + Projekt-Portfolio von Stefan Weitzel.
 Hugo + Tailwind CSS. Keine Cookies, kein Tracking.
 
-## Lokale Entwicklung
-
-### Was du brauchst
+## Voraussetzungen
 
 - [Hugo Extended](https://gohugo.io/installation/)
 - [Tailwind CSS Standalone CLI](https://github.com/tailwindlabs/tailwindcss/releases) v3.4+
 
+### Für Deployment zusätzlich
+
+- **Git** (Repository klonen/pullen)
+- **webhook** ([github.com/adnanh/webhook](https://github.com/adnanh/webhook))
+- **SWAG** (Docker) oder Nginx mit SSL
+- **systemd**
+
+## Tools installieren
+
 ```bash
-# Tailwind CLI installieren (Linux x64)
+# Hugo Extended (Arch)
+sudo pacman -S hugo
+
+# Tailwind Standalone CLI (Linux x64)
 curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.17/tailwindcss-linux-x64
 chmod +x tailwindcss-linux-x64
 sudo mv tailwindcss-linux-x64 /usr/local/bin/tailwindcss
 ```
+
+Zusätzlich auf dem **Server**:
+
+```bash
+sudo pacman -S webhook git
+```
+
+## Lokale Entwicklung
 
 ### Dev-Server starten
 
@@ -53,44 +71,21 @@ GitHub Push auf main
   git pull → Tailwind-Build → Hugo-Build → Auslieferung
 ```
 
-### Was auf dem Server installiert sein muss
-
-- **Git**, **Hugo Extended**, **Tailwind CSS Standalone CLI**
-- **webhook** ([github.com/adnanh/webhook](https://github.com/adnanh/webhook))
-- **SWAG** (Docker) oder Nginx mit SSL
-- **systemd** (für den Webhook-Service)
-
-```bash
-# Arch Linux
-sudo pacman -S webhook hugo git
-
-# Tailwind CLI (Linux x64)
-curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.17/tailwindcss-linux-x64
-chmod +x tailwindcss-linux-x64
-sudo mv tailwindcss-linux-x64 /usr/local/bin/tailwindcss
-```
-
-### Schritt-für-Schritt
-
-#### 1. Repository auf den Server klonen
+### 1. Repository klonen
 
 ```bash
 git clone [REPO-URL] [PFAD-ZUM-REPO]
 ```
 
-#### 2. Setup-Script ausführen
+### 2. Deployment-Script ausführen
 
-Das Script `deployment/setup.sh` fragt alle Pfade und Zugangsdaten ab und
-erzeugt daraus die fertigen Konfigurationsdateien:
+`deployment/setup.sh` fragt alle Pfade und Zugangsdaten interaktiv ab
+und erzeugt fertige Konfigurationen in `deployment/generated/`:
 
 ```bash
 cd [PFAD-ZUM-REPO]
 ./deployment/setup.sh
 ```
-
-Die fertigen Dateien liegen danach in `deployment/generated/`.
-
-Das sind:
 
 | Vorlage | Erzeugt | Wohin? |
 |---|---|---|
@@ -100,36 +95,36 @@ Das sind:
 | `nginx-location.conf.example` | `generated/nginx-location.conf` | In SWAG/Nginx-Site-Konfig einfügen |
 | `logrotate.conf.example` | `generated/logrotate.conf` | `/etc/logrotate.d/` |
 
-#### 3. Dateien an ihre Zielpfade kopieren
+### 3. Dateien kopieren
 
-Die genauen `sudo cp`-Befehle zeigt `setup.sh` am Ende an.
+Die `sudo cp`-Befehle zeigt `setup.sh` am Ende an.
 
-#### 4. Webhook-Service starten
+### 4. Service starten
 
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl enable --now webhook
 ```
 
-#### 5. GitHub Webhook einrichten
+### 5. GitHub Webhook einrichten
 
 1. GitHub → **Repository** → **Settings** → **Webhooks** → **Add webhook**
-2. **Payload URL:** Die URL, die `setup.sh` ausgibt (z. B. `https://example.com/webhook-a3f8b2c1/`)
+2. **Payload URL:** Die URL, die `setup.sh` ausgibt
 3. **Content type:** `application/json`
-4. **Secret:** Das `[WEBHOOK-SECRET]` aus `setup.sh`
+4. **Secret:** Das aus `setup.sh`
 5. **Events:** "Just the push event"
 6. **Add webhook**
 
 ### Testen
 
 ```bash
-# Läuft der Webhook-Service?
+# Läuft der Service?
 sudo systemctl status webhook
 
-# Eingehende Requests beobachten
+# Requests beobachten
 sudo journalctl -u webhook -f
 
-# Deploy-Log prüfen (nach einem Push)
+# Deploy-Log (nach einem Push)
 cat [WEBHOOK-PFAD]/deploy.log
 ```
 

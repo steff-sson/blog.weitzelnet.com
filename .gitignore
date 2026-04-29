@@ -6,11 +6,9 @@
 # Tailwind
 /static/css/main.css
 
-# Deployment — nur .example-Dateien werden versioniert
-deployment/generated/
-
 # Private Dateien
 Hintergrund/
+DEPLOYMENT.md
 
 # OS
 .DS_Store

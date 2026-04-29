@@ -1,8 +1,0 @@
-[WEBHOOK-PFAD]/deploy.log {
-    weekly
-    rotate 4
-    compress
-    missingok
-    notifempty
-    copytruncate
-}

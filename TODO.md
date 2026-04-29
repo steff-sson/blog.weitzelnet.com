@@ -3,7 +3,7 @@
 ## Vor dem Launch
 
 - [ ] E-Mail-Alias in `layouts/partials/footer.html`, `content/impressum.md`, `content/datenschutz.md` ersetzen
-- [ ] Deployment-Dateien aus `deployment/` anpassen (Platzhalter ersetzen) und auf Server ablegen (siehe README.md)
+- [ ] Deployment auf Server einrichten (DEPLOYMENT.md befolgen)
 - [ ] Logo entwickeln → `static/img/logo.svg` + `static/img/og-image.jpg`
 - [ ] Hero-Claim in `content/_index.md` anpassen (`hero.claim`)
 - [ ] `content/projekte/ai-development.md`: `repo_url` setzen (sobald Repository existiert)

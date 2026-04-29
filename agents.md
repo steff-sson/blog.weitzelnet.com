@@ -71,9 +71,16 @@ blog.weitzelnet.com/
 ├── assets/
 │   └── css/
 │       └── main.css                 ← Tailwind-Quelle (editieren!)
+├── deployment/                      ← Beispiel-Dateien fürs Server-Deployment (Platzhalter, keine echten Pfade)
+│   ├── deploy.sh
+│   ├── hooks.json
+│   ├── webhook.service
+│   └── nginx-location.conf
 ├── hugo.toml
 ├── tailwind.config.js
 ├── Plan.md                          ← Projekt-Plan
+├── README.md                        ← Setup, Dev, Deployment-Anleitung
+├── TODO.md                          ← Offene Aufgaben
 └── agents.md                        ← Diese Datei
 ```
 
@@ -459,7 +466,9 @@ hugo --minify
 4. Nur bei Build-Erfolg (Exit 0) wird `public/` ausgeliefert
 5. Statischer Output wird von SWAG (Nginx) ausgeliefert
 
-**Details zum Deployment sind NICHT in diesem Repo** (private Server-Konfiguration).
+**Beispiel-Dateien fürs Deployment** liegen im `deployment/`-Ordner. Sie enthalten 
+ausschließlich `[PLATZHALTER]` statt echter Server-Pfade, User-Namen oder Secrets.
+Die eigentlichen Werte werden erst beim Kopieren auf den Server gesetzt (siehe README.md).
 
 ---
 

@@ -1,0 +1,31 @@
+[
+  {
+    "id": "deploy-blog",
+    "execute-command": "[PFAD-ZUM-WEBHOOK]/scripts/deploy.sh",
+    "response-message": "Deployment gestartet",
+    "trigger-rule": {
+      "and": [
+        {
+          "match": {
+            "type": "payload-hmac-sha256",
+            "secret": "[WEBHOOK-SECRET]",
+            "parameter": {
+              "source": "header",
+              "name": "X-Hub-Signature-256"
+            }
+          }
+        },
+        {
+          "match": {
+            "type": "value",
+            "value": "refs/heads/main",
+            "parameter": {
+              "source": "payload",
+              "name": "ref"
+            }
+          }
+        }
+      ]
+    }
+  }
+]

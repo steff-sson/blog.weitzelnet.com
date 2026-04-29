@@ -1,0 +1,15 @@
+[Unit]
+Description=GitHub Webhook Server
+After=network.target
+
+[Service]
+Type=simple
+User=[DEIN-USER]
+WorkingDirectory=[PFAD-ZUM-WEBHOOK]
+ExecStart=/usr/bin/webhook -hooks [PFAD-ZUM-WEBHOOK]/hooks.json -verbose -port 9000
+Restart=always
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

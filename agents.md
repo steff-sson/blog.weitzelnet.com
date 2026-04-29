@@ -71,6 +71,7 @@ blog.weitzelnet.com/
 ├── assets/
 │   └── css/
 │       └── main.css                 ← Tailwind-Quelle (editieren!)
+├── deployment/                      ← setup.sh (heredocs → _output/ ist gitignored)
 ├── hugo.toml
 ├── tailwind.config.js
 ├── Plan.md                          ← Projekt-Plan
@@ -461,7 +462,7 @@ hugo --minify
 4. Nur bei Build-Erfolg (Exit 0) wird `public/` ausgeliefert
 5. Statischer Output wird von SWAG (Nginx) ausgeliefert
 
-**Deployment-Details** befinden sich in `DEPLOYMENT.md` (lokal, `.gitignore`).
+**Deployment-Setup** erfolgt über `deployment/setup.sh` (alle Templates als heredocs, interaktive Abfrage der Variablen, Ausgabe nach `deployment/_output/`). Ausführliche manuelle Anleitung in `DEPLOYMENT.md` (lokal, `.gitignore`).
 
 ---
 

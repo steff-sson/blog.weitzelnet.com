@@ -6,6 +6,9 @@
 # Tailwind
 /static/css/main.css
 
+# Deployment — generierte Configs (werden von setup.sh erstellt)
+deployment/_output/
+
 # Private Dateien
 Hintergrund/
 DEPLOYMENT.md

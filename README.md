@@ -46,8 +46,28 @@ hugo --minify
 
 ## Deployment
 
-Die Site wird bei jedem Push auf `main` automatisch aktualisiert.
-Setup-Details befinden sich in **DEPLOYMENT.md** (lokal, nicht im Repository).
+Die Site wird bei jedem Push auf `main` automatisch aktualisiert:
+
+```
+GitHub Push → Webhook → git pull → tailwindcss (minify) → hugo (minify) → Nginx
+```
+
+### Setup (einmalig auf dem Server)
+
+**Voraussetzungen auf dem Server:** Git, Hugo, Tailwind Standalone CLI, webhook (`sudo pacman -S webhook`), systemd, SWAG/Nginx mit SSL.
+
+```bash
+# Repository klonen
+git clone https://github.com/steff-sson/blog.weitzelnet.com.git
+
+# Deployment-Konfiguration erzeugen
+cd blog.weitzelnet.com
+./deployment/setup.sh
+```
+
+Das Script fragt alle Pfade und Secrets ab und erzeugt die fertigen Konfigurationsdateien in `deployment/_output/`. Die genauen `sudo cp`-Befehle zeigt es am Ende an.
+
+Ausführliche manuelle Anleitung (mit allen Configs als Copy/Paste): **DEPLOYMENT.md** (lokal, nicht im Repository).
 
 ## Projektstruktur
 
@@ -57,6 +77,7 @@ blog.weitzelnet.com/
 ├── layouts/              ← Hugo-Templates
 ├── static/               ← Bilder, CSS-Output (generiert)
 ├── assets/css/           ← Tailwind-Quelle (editieren!)
+├── deployment/           ← setup.sh (heredocs → _output/)
 ├── hugo.toml
 └── tailwind.config.js
 ```

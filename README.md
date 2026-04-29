@@ -24,17 +24,23 @@ sudo mv tailwindcss-linux-x64 /usr/local/bin/tailwindcss
 
 ### Dev-Server starten
 
-Zwei Terminals:
-
 ```bash
-# Terminal 1: CSS automatisch neu bauen
-tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --watch
-
-# Terminal 2: Hugo Dev-Server
 hugo server
 ```
 
-Öffne `http://localhost:1313` — Änderungen an Templates und CSS werden automatisch sichtbar.
+Öffne `http://localhost:1313` — Änderungen an Inhalten und Templates werden automatisch neu geladen.
+
+### CSS bearbeiten
+
+Wenn du `assets/css/main.css` änderst, Tailwind neu kompilieren:
+
+```bash
+# Einmalig
+tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --minify
+
+# Oder Watch-Modus (dauerhaft, zweites Terminal)
+tailwindcss -i ./assets/css/main.css -o ./static/css/main.css --watch
+```
 
 ### Für den Live-Betrieb bauen
 

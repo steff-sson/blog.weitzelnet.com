@@ -1,0 +1,14 @@
+# Hugo
+/public/
+/resources/
+/.hugo_build.lock
+
+# Tailwind
+/static/css/main.css
+
+# Private Dateien
+Hintergrund/
+
+# OS
+.DS_Store
+Thumbs.db

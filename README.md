@@ -11,7 +11,7 @@ Hugo + Tailwind CSS. Keine Cookies, kein Tracking.
 ### Für Deployment zusätzlich
 
 - **Git** (Repository klonen/pullen)
-- **webhook** ([github.com/adnanh/webhook](https://github.com/adnanh/webhook))
+- **webhook** (Arch-Paket: `webhook`)
 - **SWAG** (Docker) oder Nginx mit SSL
 - **systemd**
 
